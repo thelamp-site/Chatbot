@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>RahulBot</title>
+</head>
+<body style="background-color:#111;color:#fff;font-family:sans-serif;padding:20px;">
+  <h2>Talk to RahulBot</h2>
+  <input id="msg" type="text" placeholder="Write message..." style="width:80%;padding:10px;">
+  <button onclick="send()" style="padding:10px;">Send</button>
+  <div id="chat" style="margin-top:20px;"></div>
+
+  <script>
+    const API_URL = "https://your-render-backend.onrender.com/chat"; // change this after deploy
+
+    async function send() {
+      const input = document.getElementById("msg");
+      const chat = document.getElementById("chat");
+      const message = input.value.trim();
+      if (!message) return;
+
+      chat.innerHTML += `<p><b>You:</b> ${message}</p>`;
+      input.value = "";
+
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await res.json();
+      chat.innerHTML += `<p><b>Bot:</b> ${data.reply}</p>`;
+    }
+  </script>
+</body>
+</html>
